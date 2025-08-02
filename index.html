@@ -766,33 +766,107 @@
                     exportText += '\n';
                 }
                 
-                // Add conversation statistics
-                const userMessages = conversationHistory.filter(h => h.sender === 'user').length;
-                const aiMessages = conversationHistory.filter(h => h.sender === 'ai').length;
+                // Get all messages from the chat container to include system messages
+                const chatContainer = document.getElementById('chatContainer');
+                const messageElements = chatContainer.getElementsByClassName('message');
+                
+                // Count different message types from actual chat display
+                let userMessages = 0;
+                let aiMessages = 0;
+                let systemMessages = 0;
+                
+                for (let i = 0; i < messageElements.length; i++) {
+                    const messageElement = messageElements[i];
+                    if (messageElement.className.includes('user')) {
+                        userMessages++;
+                    } else if (messageElement.className.includes('ai')) {
+                        aiMessages++;
+                    } else if (messageElement.className.includes('system')) {
+                        systemMessages++;
+                    }
+                }
+                
                 const sessionDuration = Date.now() - parseInt(sessionId.split('_')[1]);
                 const durationMinutes = Math.floor(sessionDuration / 60000);
                 const durationSeconds = Math.floor((sessionDuration % 60000) / 1000);
                 
                 exportText += 'CONVERSATION STATISTICS:\n';
                 exportText += '-'.repeat(25) + '\n';
-                exportText += `Total Messages: ${conversationHistory.length}\n`;
+                exportText += `Total Messages: ${userMessages + aiMessages + systemMessages}\n`;
                 exportText += `Student Messages: ${userMessages}\n`;
                 exportText += `AI Patient Messages: ${aiMessages}\n`;
+                exportText += `System Messages: ${systemMessages}\n`;
                 exportText += `Session Duration: ${durationMinutes}m ${durationSeconds}s\n\n`;
                 
-                // Add full conversation
+                // Add full conversation - capture everything displayed in the chat
                 exportText += 'FULL CONVERSATION:\n';
                 exportText += '-'.repeat(20) + '\n\n';
                 
-                conversationHistory.forEach((msg, index) => {
-                    const speaker = msg.sender === 'user' ? 'STUDENT' : 'AI PATIENT';
+                for (let i = 0; i < messageElements.length; i++) {
+                    const messageElement = messageElements[i];
+                    const messageClass = messageElement.className;
+                    
+                    // Determine speaker type from CSS class
+                    let speaker = 'UNKNOWN';
+                    if (messageClass.includes('user')) {
+                        speaker = 'STUDENT';
+                    } else if (messageClass.includes('ai')) {
+                        speaker = 'AI PATIENT';
+                    } else if (messageClass.includes('system')) {
+                        speaker = 'SYSTEM';
+                    }
+                    
+                    // Get the message content and clean it up
+                    let messageContent = messageElement.innerHTML
+                        .replace(/<br\s*\/?>/gi, '\n') // Convert <br> to newlines
+                        .replace(/<\/p><p[^>]*>/gi, '\n\n') // Convert paragraph breaks
+                        .replace(/<p[^>]*>/gi, '') // Remove opening p tags
+                        .replace(/<\/p>/gi, '') // Remove closing p tags
+                        .replace(/<h[1-6][^>]*>/gi, '\n**') // Convert headers to markdown-style bold
+                        .replace(/<\/h[1-6]>/gi, '**\n') // Close headers
+                        .replace(/<strong[^>]*>/gi, '**') // Convert bold to markdown
+                        .replace(/<\/strong>/gi, '**')
+                        .replace(/<em[^>]*>/gi, '*') // Convert italic to markdown
+                        .replace(/<\/em>/gi, '*')
+                        .replace(/<ul[^>]*>/gi, '\n') // Convert lists
+                        .replace(/<\/ul>/gi, '')
+                        .replace(/<li[^>]*>/gi, '  • ') // Convert list items to bullets
+                        .replace(/<\/li>/gi, '\n')
+                        .replace(/<div[^>]*class="spinner"[^>]*><\/div>/gi, '') // Remove spinner divs
+                        .replace(/<[^>]*>/g, '') // Remove any remaining HTML tags
+                        .replace(/&nbsp;/g, ' ') // Replace non-breaking spaces
+                        .replace(/&amp;/g, '&') // Replace HTML entities
+                        .replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>')
+                        .replace(/&quot;/g, '"')
+                        .replace(/\n\s*\n\s*\n/g, '\n\n') // Remove excessive line breaks
+                        .trim();
+                    
+                    // Skip empty messages or spinner messages
+                    if (!messageContent || messageContent.includes('spinner') || messageContent === '') {
+                        continue;
+                    }
+                    
+                    // Add speaker and message
                     exportText += `${speaker}:\n`;
-                    exportText += `  ${msg.message}\n\n`;
-                });
+                    
+                    // Add message with proper formatting
+                    const lines = messageContent.split('\n');
+                    lines.forEach(line => {
+                        if (line.trim()) {
+                            exportText += `  ${line.trim()}\n`;
+                        } else {
+                            exportText += '\n';
+                        }
+                    });
+                    
+                    exportText += '\n'; // Add space between messages
+                }
                 
                 // Add export footer
                 exportText += '='.repeat(60) + '\n';
                 exportText += 'End of Conversation Export\n';
+                exportText += 'Generated by Pharmacy Training System v1.1\n';
                 exportText += '='.repeat(60) + '\n';
                 
                 // Create and download the file
