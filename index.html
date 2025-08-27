@@ -16,26 +16,31 @@
         
         /* CSS Variables for easy color scheme changes */
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --secondary-color: #10b981;
-            --danger-color: #ef4444;
-            --background: #1e3a8a;
-            --card-background: #ffffff;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --border-color: #e5e7eb;
-            --success-color: #059669;
-            --warning-color: #f59e0b;
-        }
+    --primary-color: #6366f1;
+    --primary-hover: #4f46e5;
+    --secondary-color: #10b981;
+    --danger-color: #ef4444;
+    --background: #0f0f23;
+    --card-background: #1a1a2e;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --chat-background: #16213e;
+    --input-background: #1e293b;
+    --accent-glow: rgba(99, 102, 241, 0.3);
+}
         
         /* Main body styling */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--background);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(rgba(15, 15, 35, 0.6), rgba(22, 33, 62, 0.6)), 
+                url('https://images.unsplash.com/photo-1471864190281-a93a3070b6de?q.jpg') center center/cover no-repeat fixed;
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
         
         /* Container for centering content */
         .container {
@@ -95,17 +100,20 @@
         
         /* Card component for sections */
         .card {
-            background: var(--card-background);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .card h2 {
-            margin-bottom: 15px;
-            color: var(--text-primary);
-            font-size: 1.25rem;
-        }
+    background: var(--card-background);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+}
+
+.card h2 {
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    text-shadow: 0 0 5px var(--accent-glow);
+}
         
         /* Form input styling */
         .form-group {
@@ -120,19 +128,27 @@
         }
         
         input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-            font-family: inherit;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    background: var(--input-background);
+    color: var(--text-primary);
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+select option {
+    background: var(--input-background);
+    color: var(--text-primary);
+}
         
         /* Button styling */
         button {
@@ -223,14 +239,15 @@
         
         /* Chat display area */
         .chat-container {
-            height: 400px;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            background-color: #fafafa;
-            margin-bottom: 15px;
-        }
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    background: var(--chat-background);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 15px;
+}
         
         /* Individual message styling */
         .message {
@@ -248,17 +265,20 @@
         }
         
         .message.ai {
-            background-color: #e5e7eb;
-            color: var(--text-primary);
-        }
-        
-        .message.system {
-            background-color: #f3f4f6;
-            color: var(--text-secondary);
-            font-style: italic;
-            border-left: 4px solid var(--success-color);
-            max-width: 100%;
-        }
+    background: #2d3748;
+    color: var(--text-primary);
+    border-left: 3px solid var(--secondary-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.message.system {
+    background: #1a202c;
+    color: var(--text-secondary);
+    font-style: italic;
+    border-left: 4px solid var(--success-color);
+    max-width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
         
         /* Status indicator */
         .status {
