@@ -702,9 +702,9 @@ select option {
         </select>
     </div>
     
-    <button class="btn-secondary" onclick="selectRandomScenario()" style="margin-top: 10px;">
-        Random Scenario
-    </button>
+    <button class="btn-secondary" onclick="selectRandomScenario()" style="margin-top: 10px; width: 100%;">
+    🎲 Random Scenario
+</button>
     
     <!-- Patient Image Button -->
     <button 
@@ -727,31 +727,34 @@ select option {
                 </div>
                 
                 <!-- Message input area -->
-                <div class="form-group">
-                    <label for="messageInput">Your Message:</label>
-                    <div class="input-group">
-                        <textarea 
-                            id="messageInput" 
-                            placeholder="Type your consultation message here..."
-                            rows="3"
-                            onkeydown="handleKeyPress(event)"
-                        ></textarea>
-                        <button class="btn-primary" onclick="sendMessage()">
-                            Send Message
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Control buttons with improved layout -->
-<div class="button-group">
-    <button class="btn-secondary" onclick="clearChat()">
-        Clear Chat
+<div class="form-group">
+    <label for="messageInput">Your Message:</label>
+    <textarea 
+        id="messageInput" 
+        placeholder="Type your consultation message here..."
+        rows="3"
+        onkeydown="handleKeyPress(event)"
+        style="margin-bottom: 10px;"
+    ></textarea>
+    <button class="btn-primary" onclick="sendMessage()" style="width: 100%;">
+        Send Message
     </button>
+</div>
+                
+                <!-- Primary action buttons -->
+<div class="button-group" style="margin-top: 10px; margin-bottom: 20px;">
     <button class="btn-danger" onclick="submitConversation()">
         Submit for Evaluation
     </button>
     <button class="btn-info" onclick="exportConversation()">
         Export Chat
+    </button>
+</div>
+
+<!-- Secondary control buttons -->
+<div class="button-group" style="margin-top: 20px;">
+    <button class="btn-secondary" onclick="clearChat()">
+        Clear Chat
     </button>
     <button class="btn-warning" onclick="newSession()">
         New Session
