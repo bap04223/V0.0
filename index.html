@@ -802,14 +802,7 @@ let currentScenarioSet = null;      // Currently selected scenario set
             messageInput.focus();
         }
 
-// ===== GOOGLE SHEETS INTEGRATION =====
-        // Load sheet names from Google Sheets
-        
-        } catch (error) {
-                console.error('Error loading sheet:', error);
-                showStatus('Error loading sheet data. Check console for details.', 'error');
-            }
-        }
+
         
         // ===== CHATBOT CONFIGURATION MANAGEMENT =====
 
@@ -1081,7 +1074,105 @@ let currentScenarioSet = null;      // Currently selected scenario set
             setButtonStatus(buttonId, 'pending', pendingText);
         }
 
-            
+
+async function loadSheetNames() {
+    const sheetId = document.getElementById('sheetId').value;
+    
+    if (!sheetId) {
+        showStatus('Please enter Sheet ID first', 'error');
+        return;
+    }
+    
+    showStatus('Loading sheet names...', 'info');
+    
+    try {
+        const apiKey = 'AIzaSyDCrWAPXe6eYugvmnO1eJb7-S4QXQj3EgQ';
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?fields=sheets.properties.title&key=${apiKey}`;
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const sheetNames = data.sheets.map(sheet => sheet.properties.title);
+        
+        populateSheetNameDropdown(sheetNames);
+        showStatus(`Found ${sheetNames.length} sheets`, 'success');
+        
+    } catch (error) {
+        console.error('Error loading sheet names:', error);
+        showStatus('Could not load sheet names automatically.', 'error');
+        
+        const select = document.getElementById('sheetName');
+        select.disabled = false;
+        select.innerHTML = '<option value="">Enter sheet name manually below...</option>';
+    }
+}
+
+function populateSheetNameDropdown(sheetNames) {
+    const select = document.getElementById('sheetName');
+    select.innerHTML = '<option value="">Select a sheet...</option>';
+    select.disabled = false;
+    
+    sheetNames.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+    });
+    
+    select.addEventListener('change', function() {
+        if (this.value) {
+            saveConfig();
+            loadSheetData();
+        }
+    });
+}
+
+function getSelectedSheetName() {
+    const dropdown = document.getElementById('sheetName');
+    return dropdown.value;
+}
+
+async function loadSheetData() {
+    const sheetId = document.getElementById('sheetId').value;
+    const sheetName = getSelectedSheetName();
+    
+    if (!sheetId || !sheetName) {
+        showStatus('Please enter Sheet ID and select Sheet Name', 'error');
+        return;
+    }
+    
+    showStatus(`Loading data from sheet: ${sheetName}...`, 'info');
+    
+    try {
+        const apiKey = 'AIzaSyDCrWAPXe6eYugvmnO1eJb7-S4QXQj3EgQ';
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(sheetName)}?key=${apiKey}`;
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.values && data.values.length > 0) {
+            sheetData = data.values;
+            populateScenarioDropdown();
+            showStatus(`Loaded ${data.values.length - 1} scenarios from ${sheetName}`, 'success');
+        } else {
+            showStatus('No data found in the selected sheet', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Error loading sheet:', error);
+        showStatus('Error loading sheet data. Check console for details.', 'error');
+    }
+}
+        
         // Populate the scenario selection dropdown
         function populateScenarioDropdown() {
             const select = document.getElementById('scenarioSelect');
@@ -1524,7 +1615,6 @@ let currentScenarioSet = null;      // Currently selected scenario set
     showStatus('Webhook URL not configured. Please select a chatbot first.', 'error');
     return;
 }
-            }
             
             // Show loading spinner
             addMessage('<div class="spinner"></div>', 'ai');
@@ -1633,7 +1723,6 @@ let currentScenarioSet = null;      // Currently selected scenario set
     showStatus('Submit webhook URL not configured. Please select a chatbot first.', 'error');
     return;
 }
-            }
             
             if (conversationHistory.length === 0) {
                 showStatus('No conversation to submit', 'error');
