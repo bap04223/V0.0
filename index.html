@@ -1728,43 +1728,14 @@ exportText += `AI Patient Messages: ${aiMessages}\n`;
 exportText += `System Messages: ${systemMessages}\n`;
 exportText += `Session Duration: ${durationMinutes}m ${durationSeconds}s\n\n`;
                 
-                // Get all messages from the chat container to include system messages
-                const chatContainer = document.getElementById('chatContainer');
-                const messageElements = chatContainer.getElementsByClassName('message');
-                
-                // Count different message types from actual chat display
-                let userMessages = 0;
-                let aiMessages = 0;
-                let systemMessages = 0;
-                
-                for (let i = 0; i < messageElements.length; i++) {
-                    const messageElement = messageElements[i];
-                    if (messageElement.className.includes('user')) {
-                        userMessages++;
-                    } else if (messageElement.className.includes('ai')) {
-                        aiMessages++;
-                    } else if (messageElement.className.includes('system')) {
-                        systemMessages++;
-                    }
-                }
-                
-                const sessionDuration = Date.now() - parseInt(sessionId.split('_')[1]);
-                const durationMinutes = Math.floor(sessionDuration / 60000);
-                const durationSeconds = Math.floor((sessionDuration % 60000) / 1000);
-                
-                exportText += 'CONVERSATION STATISTICS:\n';
-                exportText += '-'.repeat(25) + '\n';
-                exportText += `Total Messages: ${userMessages + aiMessages + systemMessages}\n`;
-                exportText += `Student Messages: ${userMessages}\n`;
-                exportText += `AI Patient Messages: ${aiMessages}\n`;
-                exportText += `System Messages: ${systemMessages}\n`;
-                exportText += `Session Duration: ${durationMinutes}m ${durationSeconds}s\n\n`;
-                
                 // Add full conversation - capture everything displayed in the chat
-                exportText += 'FULL CONVERSATION:\n';
-                exportText += '-'.repeat(20) + '\n\n';
-                
-                for (let i = 0; i < messageElements.length; i++) {
+exportText += 'FULL CONVERSATION:\n';
+exportText += '-'.repeat(20) + '\n\n';
+
+const chatContainer = document.getElementById('chatContainer');
+const messageElements = chatContainer.getElementsByClassName('message');
+
+for (let i = 0; i < messageElements.length; i++) {
                     const messageElement = messageElements[i];
                     const messageClass = messageElement.className;
                     
