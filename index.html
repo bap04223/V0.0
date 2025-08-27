@@ -703,7 +703,7 @@ select option {
     </div>
     
     <button class="btn-secondary" onclick="selectRandomScenario()" style="margin-top: 10px; width: 100%;">
-    🎲 Random Scenario
+    Random Scenario
 </button>
     
     <!-- Patient Image Button -->
@@ -742,7 +742,10 @@ select option {
 </div>
                 
                 <!-- Primary action buttons -->
-<div class="button-group" style="margin-top: 10px; margin-bottom: 20px;">
+<div class="button-group" style="margin-top: 40px; margin-bottom: 20px;">
+     <button class="btn-secondary" onclick="clearChat()">
+        Clear Chat
+    </button>
     <button class="btn-danger" onclick="submitConversation()">
         Submit for Evaluation
     </button>
@@ -752,10 +755,8 @@ select option {
 </div>
 
 <!-- Secondary control buttons -->
-<div class="button-group" style="margin-top: 20px;">
-    <button class="btn-secondary" onclick="clearChat()">
-        Clear Chat
-    </button>
+<div class="button-group" style="margin-top: 20px; style="width: 100%;">
+   
     <button class="btn-warning" onclick="newSession()">
         New Session
     </button>
