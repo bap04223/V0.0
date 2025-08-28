@@ -2107,14 +2107,17 @@ for (let i = 0; i < messageElements.length; i++) {
                         .replace(/^- (.*$)/gm, '<li style="margin: 5px 0; padding-left: 5px;">$1</li>')
                         // Convert 1. numbered lists to proper list items
                         .replace(/^\d+\. (.*$)/gm, '<li style="margin: 5px 0; padding-left: 5px;">$1</li>')
-                        // Convert double line breaks to paragraph breaks
-                        .replace(/\n\n/g, '</p><p style="margin: 10px 0; line-height: 1.5;">')
-                        // Convert single line breaks to <br>
-                        .replace(/\n/g, '<br>');
+                       // Convert double line breaks to paragraph breaks FIRST
+        .replace(/\n\n+/g, '</p><p style="margin: 15px 0; line-height: 1.6;">')
+        // Convert remaining single line breaks to <br>
+        .replace(/\n/g, '<br>')
+        // Clean up any escaped newlines that might exist
+        .replace(/\\n\\n+/g, '</p><p style="margin: 15px 0; line-height: 1.6;">')
+        .replace(/\\n/g, '<br>');
                     
                     // Wrap in paragraph tags if not already wrapped
                     if (!formatted.includes('<p>') && !formatted.includes('<h')) {
-                        formatted = `<p style="margin: 10px 0; line-height: 1.5;">${formatted}</p>`;
+    formatted = `<p style="margin: 15px 0; line-height: 1.6;">${formatted}</p>`;
                     } else if (formatted.includes('<p>')) {
                         // Ensure it starts with a paragraph
                         if (!formatted.startsWith('<p>') && !formatted.startsWith('<h')) {
