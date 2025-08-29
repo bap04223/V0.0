@@ -644,6 +644,27 @@ select option {
                 transform: scale(1) translateY(0);
             }
         }
+
+
+        .card-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.card-icon:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+        
     </style>
 </head>
 
@@ -651,8 +672,10 @@ select option {
     <div class="container">
         <!-- Header section with title and description -->
         <div class="header">
+            <div class="card-icon">💬</div>
             <h1>Text-Bot Consultation Training</h1>
             <p>Practice your consultation skills with our AI-powered patients</p>
+            <div class="card-icon">💬</div>
         </div>
                
         <!-- Main content grid -->
