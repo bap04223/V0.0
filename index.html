@@ -913,13 +913,19 @@ function updateSessionInfo() {
         // ===== MESSAGE HANDLING =====
         // Handle sending messages and keyboard shortcuts
         
-        function handleKeyPress(event) {
-            // Send message on Ctrl+Enter or Cmd+Enter
-            if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-                event.preventDefault();
-                sendMessage();
-            }
-        }
+        
+function handleKeyPress(event) {
+    // Send message on Enter (but not Shift+Enter, which should create new line)
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+    // Keep the existing Ctrl+Enter or Cmd+Enter functionality as backup
+    else if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+        event.preventDefault();
+        sendMessage();
+    }
+}
         
         function sendMessage() {
             const messageInput = document.getElementById('messageInput');
