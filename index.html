@@ -62,6 +62,7 @@
             background: var(--card-background);
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.8s ease-out both;
         }
         
         .header h1 {
@@ -118,6 +119,19 @@
     height: 100%;
     position: relative;
     overflow: hidden;
+    animation: fadeInUp 0.8s ease-out both;
+}
+
+.card:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.card:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.card:nth-child(3) {
+    animation-delay: 0.6s;
 }
 
         .card-content {
@@ -356,6 +370,17 @@ select option {
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         /* Button group styling for control buttons */
